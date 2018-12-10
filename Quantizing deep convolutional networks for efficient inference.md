@@ -17,4 +17,36 @@
 3. 还可以通过对压缩后低精度的网络采用更高效的运算kernel来提高推断的速度。如GEMMLOWP[7],Intel MKL-DNN[8],ARM CMSIS[9],Qualcomm SNPE[10],Nvidia TensorRT[11],定制硬件推断加速器[12][13][14]。
 
 **量化**是其中一种非常常见和重要的方法，通过降低神经网络权值和激励的表示精度，量化后的网络可以获得以下的优点：
+* 首先量化方法适用于绝大多数的应用场景和基本上全部的神经网络模型。我们不需要为了使用量化压缩而设计新的模型架构，这极大地节省了开发的时间。在很多情况下，我们可以直接将训练好的浮点数模型快速量化为定点数模型，在不进行re-train的情况下就可以带来很少的精度损失。同时，多种架构和硬件设计都已经支持了定点数(多数为8bit)权值和激励模型的快速inference。
+* 更小的内存占用：对一个模型使用8bit量化，我们可以将其规模减小4倍。这种操作不引入新的需要存储的参数，只是对weights进行了量化。这使得我们可以更快地下载和更新模型。
+* 更少的缓存占用：对activations进行量化意味着我们可以降低模型运行时的缓存占用。深度神经网络的中间结果都保存在缓存中供下一层网络进行使用，对模型的activations进行低精度的表示可以大大减少对缓存的占用。
+* 更快的运算：有许多硬件架构都支持对定点数的快速运算。
+* 更低的功耗：在很多应用中，对访存所带来的功耗要远远大于预算的功耗，而移动8bit的数据要比移动32bit浮点数带来的功耗小4倍，对模型进行量化可以有效降低网络的功耗。
 
+---
+## 2 Quantizer Design
+**To be continued**
+
+---
+
+## 3 Quantized Inference:Performance and Accuracy
+在本章中我们主要讨论采用不同的量化方法对模型的性能和精度所带来的影响。
+### 3.1 Post Training Quantization
+Post Training 顾名思义，就是指直接对训练后的网络进行量化而不进行re-train的量化方法，我们既可以只对weights量化，也可以同时对weights和activations进行量化。这种量化方法无非是最简单、最方便实现的一种，那么它的实际效果如何呢？接下来的几小节我们就具体看看它在实际应用中的表现吧。
+#### 3.1.1 Weight only quantization
+一个最简单的方法就是将模型的weights从32bit的浮点数表示为低精度的8bit定点数。这种量化方法适用于只希望将模型压缩为便于传输和存储的大小而不是很在意预测精度损失的情况(个人不建议使用)。
+#### 3.1.2 Quantizing both weights and activations
+此方法同时对weights和activations进行量化，由于加入了对中间结果的量化，所以我们需要标定数据和计算activations的动态范围(每层之间的activations范围不同小则相差数倍大则相差两个数量级)。通常情况下，100个mini-batch就足够我们预测该层activations的范围了，在实际应用中也可以将训练集的activations的范围当做测试集的范围。
+#### 3.1.3 Experiments
+Network | Model Parameters | Top-1 Accuracy on ImageNet(fp32)
+---|---|---|
+Mobilenet_V1_0.25_128 | 0.47M | 0.415
+Mobilenet_V2_1_224 | 3.54M | 0.719
+Mobilenet_V1_1_224 | 4.25M | 0.709
+Nasnet_Mobile | 5.3M | 0.74
+Mobilenet_V2_1.4_224 | 6.06M | 0.749
+Inception_V3 | 23.9M | 0.78
+Resnet_v1_50 | 25.6M | 0.752
+Resnet_v2_50 | 25.6M | 0.756
+Resnet_v1_152 | 60.4M | 0.768
+Resnet_v2_152 | 60.4M | 0.778
