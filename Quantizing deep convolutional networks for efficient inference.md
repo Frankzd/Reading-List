@@ -142,4 +142,5 @@ Resnet-v1_50 | 0.75 | 0.751 | 0.75 | 0.75 | 0.752
 Resnet-v2_50 | 0.75 | 0.75 | 0.75 | 0.75 | 0.756
 Resnet-v1_152 | 0.766 | 0.762 | 0.765 | 0.762 | 0.768
 Resnet-v2_152 | 0.761 | 0.76 | 0.76 | 0.76 | 0.778
+
 Table3：Post training quantization of weights and activations:
