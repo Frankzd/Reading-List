@@ -73,6 +73,7 @@ Table1: Deep Convolutional networks:Model size and accuracy
 上表罗列了几种深度神经网络(float)的模型大小和在ImageNet数据集上的Top-1准确率。
 
 **Weight only quantization**：
+
 Network | Asymmetric,per-layer | Symmetric ,per-channel | Asymmetric,per-channel | Floating Point
 -----|-----|-----|-----|-----|
 Mobilenetv1_1_224 | 0.001 | 0.591 | 0.704 | 0.709
@@ -87,6 +88,7 @@ Resnet_v2_152  | 0.761  | 0.76 | 0.77 | 0.778
 Table2:Weight only quantization:非对称的逐通道量化可以获得更高的准确率
 
 **Weight and Activation Quantization**:
+
 Network | Asymmetric,per-layer | Symmetric ,per-channel | Asymmetric,per-channel | Activation Only | Floating Point
 -----|-----|-----|-----|-----|-----
 Mobilenet-v1_1_224 | 0.001 | 0.591 | 0.703 | 0.708 | 0.709 
