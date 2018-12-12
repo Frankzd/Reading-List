@@ -56,7 +56,7 @@ Post Training 顾名思义，就是指直接对训练后的网络进行量化而
 #### 3.1.3 Experiments
 
 Network | Model Parameters | Top-1 Accuracy on ImageNet(fp32)
----|---|---|
+-----|-----|-----|
 Mobilenet_V1_0.25_128 | 0.47M | 0.415
 Mobilenet_V2_1_224 | 3.54M | 0.719
 Mobilenet_V1_1_224 | 4.25M | 0.709
@@ -73,8 +73,9 @@ Table1: Deep Convolutional networks:Model size and accuracy
 上表罗列了几种深度神经网络(float)的模型大小和在ImageNet数据集上的Top-1准确率。
 
 **Weight only quantization**：
+
 Network | Asymmetric,per-layer | Symmetric ,per-channel | Asymmetric,per-channel | Floating Point
----|---|---|---|---|
+-----|-----|-----|-----|-----|
 Mobilenetv1_1_224 | 0.001 | 0.591 | 0.704 | 0.709
 Mobilenetv2_1_224 | 0.001 | 0.698 | 0.698 | 0.719
 NasnetMobile | 0.722 | 0.721 | 0.74 | 0.74
@@ -87,8 +88,9 @@ Resnet_v2_152  | 0.761  | 0.76 | 0.77 | 0.778
 Table2:Weight only quantization:非对称的逐通道量化可以获得更高的准确率
 
 **Weight and Activation Quantization**:
+
 Network | Asymmetric,per-layer | Symmetric ,per-channel | Asymmetric,per-channel | Activation Only | Floating Point
----|---|---|---|---|---
+-----|-----|-----|-----|-----|-----
 Mobilenet-v1_1_224 | 0.001 | 0.591 | 0.703 | 0.708 | 0.709 
 Mobilenet-v2_1_224 | 0.001 | 0.698 | 0.697 | 0.7 | 0.719
 Nasnet-Mobile | 0.722 | 0.721 | 0.74 | 0.74 | 0.74
@@ -130,7 +132,7 @@ Quantization Aware Training 的量化操作在训练过程中进行，可以获�
 Quantization aware training可以减小压缩模型和浮点数模型精度上的差距，甚至也适用于per-layer的weights量化。我们重复了与Post-training quantization 中进行过的相同的实验，将两种量化思路进行对比。
 
 Network | Asymmetric,per-layer(Post Training Quantization) | Symmetric ,per-channel(Post Training Quantization) | Asymmetric,per-layer(Quantization Aware Training) | Symetric, per-channel(Quantization Aware Training) | Floating Point
----|---|---|---|---|---
+-----|-----|-----|-----|-----|-----
 Mobilenet-v1_1_224 | 0.001 | 0.591 | 0.70 | 0.707 | 0.709 
 Mobilenet-v2_1_224 | 0.001 | 0.698 | 0.709 | 0.711 | 0.719
 Nasnet-Mobile | 0.722 | 0.721 | 0.73 | 0.73 | 0.74
