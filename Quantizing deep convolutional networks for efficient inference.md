@@ -140,4 +140,15 @@ Resnet-v1_50 | 0.75 | 0.751 | 0.75 | 0.75 | 0.752
 Resnet-v2_50 | 0.75 | 0.75 | 0.75 | 0.75 | 0.756
 Resnet-v1_152 | 0.766 | 0.762 | 0.765 | 0.762 | 0.768
 Resnet-v2_152 | 0.761 | 0.76 | 0.76 | 0.76 | 0.778
-Table3：Post training quantization of weights and activations:
+Table4:Quantization aware training 在使用简单的量化操作时往往能获得更好的效果。
+
+#### 3.2.2 Lower Precision Networks
+
+在使用Post-training Quantization时，我们将weights和activations量化为8bit仍能获得和全精度模型相差无几的预测精度。为了突出Quantization Aware Training的优势，我们对全精度模型的weights和activations都进行了4bit量化，通过以下实验来看看训练时量化的效果：
+
+* Experiment 1：Per-channel 量化在4bit下的效果远远比Per-layer要好。
+* Experiment 2：Fine tuning 在低比特网络中可以提供很好的预测精度提升
+    > Fine tuning:即是在已经与训练好的网络的基础上继续训练，而不重新训练。
+    > 与重新训练的差别在于模型初始化方法不同，重新训练网络使用高斯随机初始化，而Fine tuning 则使用pre-trained模型训练好的参数作为初始化参数。
+* Experiment 3: 低精度activations
+    > 
