@@ -4,12 +4,12 @@
 
 本篇文章是对卷积神经网络推断过程中使用到的量化技术的概述，主要分为以下几部分：
 
-1. 对多种CNN架构进行**post-training**量化：对weights采用8bit的per-channel量化、对activations采用8bit的per-layer量化。采用此种量化方法所得的分类准确性与使用浮点数的网络相差在2%以内。[Section 3.1]
-2. 通过将weights量化为8bit，我们可以让模型的规模缩小4倍。此种量化方法实现非常简单，只需要对训练后的模型进行线性量化即可(without re-train)。[Section 3.1]
-3. 我们对量化过后的网络在CPUs和DSPs上运行的延迟(lantencies)进行了测评。结果显示，与未量化的浮点数网络相比，量化(8bit)过后的网络在CPUs可以获得2x-3x的加速比。而在具有SIMD(Single Instruction Multiple Data)功能的专用处理器上(如高通QDSPs with HVX)上，则可以获得10x的加速比。[Section 6]
-4. Quantization-aware training(训练时量化)与之前的post-train量化相比能带来一些性能上的提升，比如可以将8bit量化时造成的精度损失降低为只比浮点网络低1%以内。Quantization-aware training也能将weights的精度量化为4bit，同时带来2%到10%之间的精度下降(规模越小的网络精度下降越多)。[Section 3.2]
+1. 对多种CNN架构进行**post-training**量化：对weights采用8bit的per-channel量化、对activations采用8bit的per-layer量化。采用此种量化方法所得的分类准确性与使用浮点数的网络相差在2%以内。
+2. 通过将weights量化为8bit，我们可以让模型的规模缩小4倍。此种量化方法实现非常简单，只需要对训练后的模型进行线性量化即可(without re-train)。
+3. 我们对量化过后的网络在CPUs和DSPs上运行的延迟(lantencies)进行了测评。结果显示，与未量化的浮点数网络相比，量化(8bit)过后的网络在CPUs可以获得2x-3x的加速比。而在具有SIMD(Single Instruction Multiple Data)功能的专用处理器上(如高通QDSPs with HVX)上，则可以获得10x的加速比。
+4. Quantization-aware training(训练时量化)与之前的post-train量化相比能带来一些性能上的提升，比如可以将8bit量化时造成的精度损失降低为只比浮点网络低1%以内。Quantization-aware training也能将weights的精度量化为4bit，同时带来2%到10%之间的精度下降(规模越小的网络精度下降越多)。
 5. 对一些使用Quantization-aware training量化方法获得高预测精度的实验进行分析。
-6. 在量化过程中，我们推荐对weights进行per-channel量化，对activations进行per-layer量化。这样有利于硬件加速和对运算kernel进行优化。[Section 7]
+6. 在量化过程中，我们推荐对weights进行per-channel量化，对activations进行per-layer量化。这样有利于硬件加速和对运算kernel进行优化。
 
 -----
 
@@ -142,6 +142,7 @@ Resnet-v1_50 | 0.75 | 0.751 | 0.75 | 0.75 | 0.752
 Resnet-v2_50 | 0.75 | 0.75 | 0.75 | 0.75 | 0.756
 Resnet-v1_152 | 0.766 | 0.762 | 0.765 | 0.762 | 0.768
 Resnet-v2_152 | 0.761 | 0.76 | 0.76 | 0.76 | 0.778
+
 Table4:Quantization aware training 在使用简单的量化操作时往往能获得更好的效果。
 
 #### 3.2.2 Lower Precision Networks
@@ -153,4 +154,12 @@ Table4:Quantization aware training 在使用简单的量化操作时往往能获
     > Fine tuning:即是在已经与训练好的网络的基础上继续训练，而不重新训练。
     > 与重新训练的差别在于模型初始化方法不同，重新训练网络使用高斯随机初始化，而Fine tuning 则使用pre-trained模型训练好的参数作为初始化参数。
 * Experiment 3: 低精度activations
-    > 
+    > 对activations量化引入的误差要大于对weights进行同样bit量化所带来的误差。这是由于输入图像的activation patterns每一张都是不相同的，所欲activations进行量化时会引入随机误差，而weights则是一个确定的数值。对于一个网络来说，学习一个固定的参数是比较容易的，所以对weights量化所带来的精度损失要小于activations。
+
+## 4 Neural network acclerator recommendations
+
+1. Aggressive operator fusion:在一次数据传输中，尽可能多地执行预算操作，此举可以节省访存带来的功耗，获得更高的能效。 
+2. Compressed memory access:可以通过对weights或者activations采用快速解压技术来优化存储带宽。
+3. Lower percision arithmetic:使用低精度运算可以获得更高的加速比。
+4. Per-layer selection of bitwidth:对每层网络采用不同的量化位宽。
+
