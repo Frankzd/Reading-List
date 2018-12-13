@@ -85,6 +85,7 @@ Resnet_v1_50 | 0.75 | 0.751 | 0.752 | 0.752
 Resnet_v2_50 | 0.75 | 0.75 | 0.75 | 0.756
 Resnet_v1_152  | 0.766 |  0.763 | 0.762 | 0.768
 Resnet_v2_152  | 0.761  | 0.76 | 0.77 | 0.778
+
 Table2:Weight only quantization:非对称的逐通道量化可以获得更高的准确率
 
 **Weight and Activation Quantization**:
@@ -100,6 +101,7 @@ Resnet-v1_50 | 0.75 | 0.751 | 0.751 | 0.751 | 0.752
 Resnet-v2_50 | 0.75 | 0.75 | 0.75 | 0.75 | 0.756
 Resnet-v1_152 | 0.766 | 0.762 | 0.767 | 0.761 | 0.768
 Resnet-v2_152 | 0.761 | 0.76 | 0.76 | 0.76 | 0.778
+
 Table3：Post training quantization of weights and activations:
 对weights进行per-channel量化,对activations进行per-layer量化在以上几种网络中表现都十分不错，同时我们可以发现非对称量化往往可以获得比对称量化更好的效果。
 
