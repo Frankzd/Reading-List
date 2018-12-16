@@ -106,8 +106,16 @@ $$
 
 至此我们还需要进行步骤：
 
-1. 将输出结果量化为8-bit
-2. 转换为uint8类型数据
+1. 将输出结果的取值范围缩小到最终8bit输出的量级(scale down)
+2. 转换为uint8类型数据(saturating cast)
 3. 施加激活函数
+
+```c++
+//saturating cast
+if(data<0)  
+    data=0;  
+else if(data>255)  
+    data=255;  
+```
 
 
