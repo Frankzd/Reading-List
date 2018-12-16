@@ -160,3 +160,7 @@ $$
 即在训练过程中，模拟量化的精度损失，将weight先做量化再还原回去，这里需要注意的是该还原过程采用的是传统的量化还原方式，没有采用本文提出的量化公式进行还原。
 
 第二步：一个不带BN层的模拟量化训练流程：
+![Algorithm1](https://github.com/Frankzd/Reading-List/blob/master/images/Algorithm1.png?raw=true)
+其结构图如下：
+
+![FigureC4](https://github.com/Frankzd/Reading-List/blob/master/images/FigureC4.png?raw=true)
