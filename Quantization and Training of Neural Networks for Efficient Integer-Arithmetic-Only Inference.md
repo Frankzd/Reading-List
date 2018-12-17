@@ -177,4 +177,12 @@ a_t = alpha * a_{t-1} + (1 - alpha)*min(O_t)
 $$
 上面展示了采用EMA统计激励的量化区间下限值的过程，时间t代表训练过程中不同batch，$O_0$代表0时刻的输出激励值，$a_0$表示0时刻统计的下限值，$a_t$表示t时刻统计的下限值，alpha表示平滑系数(一般取接近于1的值，例如0.99)。
 
-第三步：一个带BN层的模拟量化训练过程
+第三步：一个带BN层的模拟量化训练过程:
+首先复习一下BN的计算过程：
+![batchnorm](https://github.com/Frankzd/Reading-List/blob/master/images/batchnorm.png?raw=true)
+上面展示了BN的计算过程，在Inference的过程中，一般会将BN的参数融于卷积运算过程中：
+$$
+y_i = r\overline x_i + \beta = \frac {r(\sum {wx + bias -u})}{\sigma} + \beta = \sum {\frac {rw} {\sigma}x} + \frac {r * bias} {\sigma} + \beta - \frac {ru}{\sigma}
+$$
+可以看到，在做卷积前先将w和bias结合BN参数做一个变换$\frac {rw}{\sigma}$,$\frac {rbias}{\sigma}$,再做正常的卷积，卷积结果加上$(\beta - \frac {ru}{\sigma})$。
+
