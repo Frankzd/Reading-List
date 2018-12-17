@@ -186,3 +186,4 @@ y_i = r\overline x_i + \beta = \frac {r(\sum {wx + bias -u})}{\sigma} + \beta = 
 $$
 可以看到，在做卷积前先将w和bias结合BN参数做一个变换$\frac {rw}{\sigma}$,$\frac {rbias}{\sigma}$,再做正常的卷积，卷积结果加上$(\beta - \frac {ru}{\sigma})$。
 
+![BN_Inference](https://github.com/Frankzd/Reading-List/blob/master/images/BN_inference.png?raw=true)
