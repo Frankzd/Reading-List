@@ -160,7 +160,9 @@ $$
 即在训练过程中，模拟量化的精度损失，将weight先做量化再还原回去，这里需要注意的是该还原过程采用的是传统的量化还原方式，没有采用本文提出的量化公式进行还原。
 
 第二步：一个不带BN层的模拟量化训练流程：
+
 ![Algorithm1](https://github.com/Frankzd/Reading-List/blob/master/images/Algorithm1.png?raw=true)
+
 其结构图如下：
 
 ![FigureC4](https://github.com/Frankzd/Reading-List/blob/master/images/FigureC4.png?raw=true)
@@ -179,7 +181,9 @@ $$
 
 第三步：一个带BN层的模拟量化训练过程:
 首先复习一下BN的计算过程：
+
 ![batchnorm](https://github.com/Frankzd/Reading-List/blob/master/images/batchnorm.png?raw=true)
+
 上面展示了BN的计算过程，在Inference的过程中，一般会将BN的参数融于卷积运算过程中：
 $$
 y_i = r\overline x_i + \beta = \frac {r(\sum {wx + bias -u})}{\sigma} + \beta = \sum {\frac {rw} {\sigma}x} + \frac {r * bias} {\sigma} + \beta - \frac {ru}{\sigma}
@@ -187,3 +191,9 @@ $$
 可以看到，在做卷积前先将w和bias结合BN参数做一个变换$\frac {rw}{\sigma}$,$\frac {rbias}{\sigma}$,再做正常的卷积，卷积结果加上$(\beta - \frac {ru}{\sigma})$。
 
 ![BN_Inference](https://github.com/Frankzd/Reading-List/blob/master/images/BN_inference.png?raw=true)
+
+训练带BN网络也需要模拟inference的过程，但BN中的均值u和方差$\sigma$是需要先做卷积算出激励值再计算的，因此在上面的BN训练流程中是做了两次卷积操作，第一次卷积仅仅是得到u和$\sigma$，然后再讲BN参数融于CNN卷积中，之后将卷积的输出往后传，上图中缺少了对于bias的变换。
+
+### 总结
+
+本文在MobileNet的基础上做8bit的训练以及量化inference，在google pixel手机（高通骁龙 835和821）上做ImageNet测试实验，发现8bit精度相对于浮点精度只低了1到2个点，在速度上却快很多。其次还采用mobileNet SSD结构做了一些物体检测实验，均发现效果以及速度都有很好的表现。
