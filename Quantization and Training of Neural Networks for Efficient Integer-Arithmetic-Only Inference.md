@@ -132,6 +132,7 @@ else if(data>255)
 所以对于激活函数，例如ReLU和ReLU6，其效果已经体现在了clamping到[0,255]这个过程中，所以不再需要激活函数。
 
 ### Training with simulated quantization
+
 传统的量化方法往往在大模型上可以取得较好的效果，但是应用在小模型上时精度下降就会很大。作者认为这是两个原因所导致的：
 
 1. 不同的输出channel对应的weights存在较大的差异(more than 100x)
@@ -168,14 +169,17 @@ $$
 ![FigureC4](https://github.com/Frankzd/Reading-List/blob/master/images/FigureC4.png?raw=true)
 
 
-训练的过程中需要学习两个东西： 
+训练的过程中需要学习两个东西：
+
 1. 学习权重等参数
 2. 学习权重和激励值的量化区间
 
 对于权重而言，只需要统计其最大最小值作为量化区间；对于激励值，激励值在inference的过程中会随着输入的不同而不断变化，因此需要做类似BN层中的（均值和方差）一样的操作，在训练的过程中通过EMA算法统计出激励值的量化区间，EMA算法统计的过程如下：
 $$
 a_0 = min(O_0)
-a_t = alpha * a_{t-1} + (1 - alpha)*min(O_t)
+$$
+$$
+a_t = alpha * a_{t-1} + ( 1 - alpha ) * min(O_t)
 $$
 上面展示了采用EMA统计激励的量化区间下限值的过程，时间t代表训练过程中不同batch，$O_0$代表0时刻的输出激励值，$a_0$表示0时刻统计的下限值，$a_t$表示t时刻统计的下限值，alpha表示平滑系数(一般取接近于1的值，例如0.99)。
 
