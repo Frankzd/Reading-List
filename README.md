@@ -62,7 +62,8 @@ https://petewarden.com/2015/04/20/why-gemm-is-at-the-heart-of-deep-learning/)
   * 二值量化：将权重和激励都表示为-1和1
   * 将量化当做优化问题来处理
   * 主要用于对RNN进行量化
-  * 
+
+> [Difference Between Uniform and Nonuniform Quantization](https://www.differencebetween.com/difference-between-uniform-and-nonuniform-quantization/)
 
 #### 变bit/组合bit量化
 
