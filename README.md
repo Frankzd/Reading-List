@@ -80,6 +80,13 @@ https://petewarden.com/2015/04/20/why-gemm-is-at-the-heart-of-deep-learning/)
 ### 神经网络加速器(Inference)
 
 * [“Efficient processing of deep neural networks: A tutorial and survey,” CoRR, vol. abs/1703.09039, 2017.](https://arxiv.org/abs/1703.09039)
+> 这是一篇很好的综述类文章，前四章可以大致阅读，仅作了解即可。
+>
+> 第五章介绍了如何在硬件上高效地实现深度神经网络，文章从通用处理器和专用处理器两个方面进行阐述，分析了各个处理器的优劣以及在不同应用场景下应该选择使用什么处理器。第二小节更是就硬件加速器设计的角度，分析了几种数据重用的方式以及dataflow的设计。
+>  
+> 第七章则是从软硬件协同的角度梳理了深度神经网络的优化方法，介绍了包括量化、剪枝、蒸馏等多个模型压缩方法。
+
+
 
 * [Nvidia, “The nvidia deep learning accelerator.” http://nvdla.org/](http://nvdla.org/)
 
